@@ -6,7 +6,7 @@ The game currently works with a local architecture where the view, game logic, a
 This assignment focuses on distributing the application using Java RMI,
 allowing players to connect from different machines while maintaining the core gameplay mechanics. Students will need to:
 
-1. Split the application into server (GameManager) and client (LocalView) components
+1. Split the application into server (GameManager) and client (LocalView) components -- or choose any other splitting such that the player can connect and play
 2. Implement remote interfaces for game state management
 3. Handle distributed player interactions
 4. Ensure proper synchronization of the game state across the network
