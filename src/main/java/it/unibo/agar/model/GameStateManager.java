@@ -1,7 +1,10 @@
 package it.unibo.agar.model;
 
-public interface GameStateManager {
-    World getWorld();
-    void setPlayerDirection(final String playerId, final double dx, final double dy);
-    void tick();
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+public interface GameStateManager extends Remote {
+    World getWorld() throws RemoteException;
+    void setPlayerDirection(final String playerId, final double dx, final double dy) throws RemoteException;
+    void tick() throws RemoteException;
 }

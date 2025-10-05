@@ -6,6 +6,7 @@ import it.unibo.agar.model.World;
 
 import javax.swing.*;
 import java.awt.*;
+import java.rmi.RemoteException;
 import java.util.Optional;
 
 public class GamePanel extends JPanel {
@@ -28,7 +29,12 @@ public class GamePanel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        World world = gameStateManager.getWorld();
+        World world = null;
+        try {
+            world = gameStateManager.getWorld();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         if (focusedPlayerId != null) {
             Optional<Player> playerOpt = world.getPlayerById(focusedPlayerId);
             if (playerOpt.isPresent()) {

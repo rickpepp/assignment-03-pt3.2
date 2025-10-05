@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.rmi.RemoteException;
 import java.util.Optional;
 
 public class LocalView extends JFrame {
@@ -36,8 +37,13 @@ public class LocalView extends JFrame {
         gamePanel.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-            Optional<Player> playerOpt = gameStateManager.getWorld().getPlayerById(playerId);
-            if (playerOpt.isPresent()) {
+                Optional<Player> playerOpt = null;
+                try {
+                    playerOpt = gameStateManager.getWorld().getPlayerById(playerId);
+                } catch (RemoteException ex) {
+                    throw new RuntimeException(ex);
+                }
+                if (playerOpt.isPresent()) {
                 Point mousePos = e.getPoint();
                 // Player is always in the center of the local view
                 double viewCenterX = gamePanel.getWidth() / 2.0;
@@ -49,9 +55,17 @@ public class LocalView extends JFrame {
                 // Normalize the direction vector
                 double magnitude = Math.hypot(dx, dy);
                 if (magnitude > 0) { // Avoid division by zero if mouse is exactly at center
-                    gameStateManager.setPlayerDirection(playerId, (dx / magnitude) * SENSITIVITY, (dy / magnitude) * SENSITIVITY);
+                    try {
+                        gameStateManager.setPlayerDirection(playerId, (dx / magnitude) * SENSITIVITY, (dy / magnitude) * SENSITIVITY);
+                    } catch (RemoteException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 } else {
-                    gameStateManager.setPlayerDirection(playerId, 0, 0); // Stop if mouse is at center
+                    try {
+                        gameStateManager.setPlayerDirection(playerId, 0, 0); // Stop if mouse is at center
+                    } catch (RemoteException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
                 // Repainting is handled by the main game loop timer
             }

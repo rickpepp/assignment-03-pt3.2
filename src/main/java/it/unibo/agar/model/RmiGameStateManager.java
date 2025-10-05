@@ -1,36 +1,36 @@
 package it.unibo.agar.model;
 
+import java.rmi.RemoteException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DefaultGameStateManager implements GameStateManager {
+public class RmiGameStateManager implements GameStateManager {
     private static final double PLAYER_SPEED = 2.0;
-    private static final int MAX_FOOD_ITEMS = 150;
-    private static final Random random = new Random();
     private World world;
     private final Map<String, Position> playerDirections;
 
 
-    public DefaultGameStateManager(final World initialWorld) {
+    public RmiGameStateManager(final World initialWorld) throws RemoteException {
+        super();
         this.world = initialWorld;
         this.playerDirections = new HashMap<>();
         this.world.getPlayers().forEach(p -> playerDirections.put(p.getId(), Position.ZERO));
     }
 
     @Override
-    public World getWorld() {
+    public synchronized World getWorld() {
         return this.world;
     }
 
     @Override
-    public void setPlayerDirection(final String playerId, final double dx, final double dy) {
+    public synchronized void setPlayerDirection(final String playerId, final double dx, final double dy) {
         // Ensure player exists before setting direction
         if (world.getPlayerById(playerId).isPresent()) {
             this.playerDirections.put(playerId, Position.of(dx, dy));
         }
     }
 
-    public void tick() {
+    public synchronized void tick() {
         this.world = handleEating(moveAllPlayers(this.world));
         cleanupPlayerDirections();
     }

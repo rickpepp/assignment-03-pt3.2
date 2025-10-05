@@ -1,5 +1,6 @@
 package it.unibo.agar.model;
 
+import java.rmi.RemoteException;
 import java.util.Comparator;
 import java.util.Optional;
 
@@ -13,7 +14,7 @@ public class AIMovement {
                 .min(Comparator.comparingDouble(player::distanceTo));
     }
 
-    public static void moveAI(final String playerName, final GameStateManager gameManager) {
+    public static void moveAI(final String playerName, final GameStateManager gameManager) throws RemoteException {
         final World world = gameManager.getWorld();
         final Optional<Player> aiOpt = world.getPlayerById(playerName);
         if (aiOpt.isPresent()) {
