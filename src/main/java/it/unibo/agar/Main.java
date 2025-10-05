@@ -3,6 +3,7 @@ package it.unibo.agar;
 import it.unibo.agar.model.*;
 import it.unibo.agar.view.GlobalView;
 import it.unibo.agar.view.LocalView;
+import it.unibo.agar.view.StartScreen;
 
 import javax.swing.*;
 import java.rmi.NotBoundException;
@@ -17,7 +18,14 @@ import java.util.TimerTask;
 public class Main {
     private static final long GAME_TICK_MS = 30; // Corresponds to ~33 FPS
 
-    public static void main(String[] args) throws RemoteException, NotBoundException {
+    public static void main(String[] args) {
+        StartScreen.showAndWait();
+    }
+
+    public static void startGame(String[] args) throws RemoteException, NotBoundException {
+        String playerName = args[0];
+        String hostAddress = args[1];
+
         final Registry registry = LocateRegistry.getRegistry();
         final GameStateManager gameManager = (GameStateManager) registry.lookup("GameManager");
 
@@ -66,7 +74,7 @@ public class Main {
                 });
             }
         }, 0, GAME_TICK_MS);
-    }
+    }        
 
     // Functional interface for repaintable views
     @FunctionalInterface
