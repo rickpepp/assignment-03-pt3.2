@@ -39,7 +39,7 @@ public class StartScreen extends JFrame {
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        panel.add(new JLabel("Broker IP address:"), gbc);
+        panel.add(new JLabel("Server IP address:"), gbc);
 
         gbc.gridx = 1;
         panel.add(hostField, gbc);
@@ -69,7 +69,7 @@ public class StartScreen extends JFrame {
                 return;
             }
             if (hostAddress.isEmpty()) {
-                statusLabel.setText("Insert broker address.");
+                statusLabel.setText("Insert server address.");
                 return;
             }
 

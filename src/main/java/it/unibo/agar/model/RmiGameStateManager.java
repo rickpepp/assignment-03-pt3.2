@@ -3,12 +3,14 @@ package it.unibo.agar.model;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class RmiGameStateManager implements GameStateManager {
     private static final double PLAYER_SPEED = 2.0;
     private World world;
     private final Map<String, Position> playerDirections;
 
+    private static final Random random = new Random();
 
     public RmiGameStateManager(final World initialWorld) throws RemoteException {
         super();
@@ -96,6 +98,17 @@ public class RmiGameStateManager implements GameStateManager {
         this.playerDirections.keySet().retainAll(currentPlayerIds);
         this.world.getPlayers().forEach(p ->
                 playerDirections.putIfAbsent(p.getId(), Position.ZERO));
+    }
+
+    @Override
+    public synchronized void addPlayer(String playerId) throws RemoteException {
+        Player player = new Player(playerId, random.nextInt(this.world.getWidth()), random.nextInt(this.world.getHeight()), 120);
+        this.world = new World(
+            this.world.getWidth(),
+            this.world.getHeight(),
+            Stream.concat(this.world.getPlayers().stream(), Stream.of(player)).collect(Collectors.toList()),
+            this.world.getFoods());
+        this.playerDirections.put(player.getId(), Position.ZERO);
     }
 
 }
