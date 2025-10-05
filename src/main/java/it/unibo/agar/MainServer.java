@@ -7,6 +7,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainServer {
 
@@ -14,6 +16,7 @@ public class MainServer {
     private static final int WORLD_HEIGHT = 1000;
     private static final int NUM_PLAYERS = 4; // p1, p2, p3, p4
     private static final int NUM_FOODS = 100;
+    private static final long GAME_TICK_MS = 30;
 
     public static void main(String[] args) throws RemoteException {
         final List<Player> initialPlayers = GameInitializer.initialPlayers(NUM_PLAYERS, WORLD_WIDTH, WORLD_HEIGHT);
@@ -23,5 +26,17 @@ public class MainServer {
         final GameStateManager stub = (GameStateManager) UnicastRemoteObject.exportObject((GameStateManager) gameManager, 0);
         final Registry registry = LocateRegistry.getRegistry(1099);
         registry.rebind("GameManager", stub);
+
+        final Timer timer = new Timer(true); // Use daemon thread for timer
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    gameManager.tick();
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, 0, GAME_TICK_MS);
     }
 }

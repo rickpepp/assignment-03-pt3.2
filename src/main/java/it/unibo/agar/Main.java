@@ -59,12 +59,6 @@ public class Main {
                     throw new RuntimeException(e);
                 }
 
-                try {
-                    gameManager.tick();
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-
                 SwingUtilities.invokeLater(() -> {
                     for (JFrameRepaintable view : views) {
                         view.repaintView();
