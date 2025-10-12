@@ -23,7 +23,7 @@ public class MainServer {
         final World initialWorld = new World(WORLD_WIDTH, WORLD_HEIGHT, new LinkedList<>(), initialFoods);
         final GameStateManager gameManager = new RmiGameStateManager(initialWorld);
         final GameStateManager stub = (GameStateManager) UnicastRemoteObject.exportObject((GameStateManager) gameManager, 0);
-        final Registry registry = LocateRegistry.getRegistry(1099);
+        Registry registry = LocateRegistry.createRegistry(1099);
         registry.rebind("GameManager", stub);
 
         final Timer timer = new Timer(true); // Use daemon thread for timer

@@ -8,4 +8,6 @@ public interface GameStateManager extends Remote {
     void setPlayerDirection(final String playerId, final double dx, final double dy) throws RemoteException;
     void tick() throws RemoteException;
     void addPlayer(final String playerId) throws RemoteException;
+
+    void removePlayer(String playerId) throws RemoteException;
 }

@@ -35,7 +35,7 @@ public class Main {
         final List<JFrameRepaintable> views = new ArrayList<>();
 
         SwingUtilities.invokeLater(() -> {
-            GlobalView globalView = new GlobalView(gameManager);
+            GlobalView globalView = new GlobalView(gameManager, playerName);
             views.add(globalView::repaintView); // Add repaint method reference
             globalView.setVisible(true);
 

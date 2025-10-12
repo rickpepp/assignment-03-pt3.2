@@ -109,6 +109,19 @@ public class RmiGameStateManager implements GameStateManager {
             Stream.concat(this.world.getPlayers().stream(), Stream.of(player)).collect(Collectors.toList()),
             this.world.getFoods());
         this.playerDirections.put(player.getId(), Position.ZERO);
+        System.out.println("Added Player " + player.getId());
+    }
+
+    @Override
+    public synchronized void removePlayer(String playerId) throws RemoteException {
+        Player player = new Player(playerId, random.nextInt(this.world.getWidth()), random.nextInt(this.world.getHeight()), 120);
+        this.world = new World(
+                this.world.getWidth(),
+                this.world.getHeight(),
+                this.world.getPlayers().stream().filter(e -> !Objects.equals(e.getId(), playerId)).collect(Collectors.toList()),
+                this.world.getFoods());
+        this.playerDirections.remove(player.getId());
+        System.out.println("Removed Player " + player.getId());
     }
 
 }

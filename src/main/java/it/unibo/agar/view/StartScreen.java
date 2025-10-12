@@ -84,10 +84,8 @@ public class StartScreen extends JFrame {
                     try {
                         Main.startGame(args);
                     } catch (RemoteException e1) {
-                        // TODO Auto-generated catch block
                         e1.printStackTrace();
                     } catch (NotBoundException e1) {
-                        // TODO Auto-generated catch block
                         e1.printStackTrace();
                     }
                 }, "GameStarterThread").start();
